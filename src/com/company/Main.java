@@ -189,9 +189,9 @@ public class Main {
             }
         }
 
-        public void calcEarlyStartTime() {
+        public int calcEarlyStartTime() {
             if (isCalculatedEarlyStartTime) {
-                return;
+                return earlyStartTime;
             }
 
             //System.out.print("Раннее время начала задачи №" + number + " Max(");
@@ -205,11 +205,12 @@ public class Main {
             System.out.println(") = " + earlyStartTime + "");
 
             isCalculatedEarlyStartTime = true;
+            return earlyStartTime;
         }
 
-        public void calcLateStartTime() {
+        public int calcLateStartTime() {
             if (isCalculatedLateStartTime) {
-                return;
+                return lateStartTime;
             }
 
             //System.out.print("Позднее время начала задачи №" + number + " Max(");
@@ -223,6 +224,7 @@ public class Main {
             System.out.println(") = " + lateStartTime + "");
 
             isCalculatedLateStartTime = true;
+            return lateStartTime;
         }
 
         public void calcReserveTime() {
@@ -241,7 +243,7 @@ public class Main {
 
         public int getEarlyStartTime() {
             if (!isCalculatedEarlyStartTime) {
-                calcEarlyStartTime();
+                return calcEarlyStartTime();
             }
 
             return earlyStartTime;
@@ -249,7 +251,7 @@ public class Main {
 
         public int getLateStartTime() {
             if (!isCalculatedLateStartTime) {
-                calcLateStartTime();
+                return calcLateStartTime();
             }
 
             return lateStartTime;
