@@ -194,10 +194,12 @@ public class Main {
                 return earlyStartTime;
             }
 
+            Arrays.stream(preNodes).filter(n -> !(n.isCalculatedEarlyStartTime)).forEach(Node::getEarlyStartTime);
+
             //System.out.print("Раннее время начала задачи №" + number + " Max(");
             System.out.print("№" + number + " Max(");
             earlyStartTime = Arrays.stream(preNodes)
-                    .peek(p -> System.out.print("[" + p.number + "] " + p.earlyStartTime + " + " + p.cost))
+                    .peek(p -> System.out.print("[" + p.number + "] " + p.getEarlyStartTime() + " + " + p.cost))
                     .map(p -> p.getEarlyStartTime() + p.cost)
                     .peek(e -> System.out.print(" = " + e + "; "))
                     .max(Integer::compareTo)
@@ -213,10 +215,12 @@ public class Main {
                 return lateStartTime;
             }
 
+            Arrays.stream(nextNodes).filter(n -> !(n.isCalculatedLateStartTime)).forEach(Node::getLateStartTime);
+
             //System.out.print("Позднее время начала задачи №" + number + " Max(");
             System.out.print("№" + number + " Min(");
             lateStartTime = Arrays.stream(nextNodes)
-                    .peek(p -> System.out.print("[" + p.number + "] " + p.lateStartTime + " - " + cost))
+                    .peek(p -> System.out.print("[" + p.number + "] " + p.getLateStartTime() + " - " + cost))
                     .map(p -> p.getLateStartTime() - cost)
                     .peek(e -> System.out.print(" = " + e + "; "))
                     .min(Integer::compareTo)
