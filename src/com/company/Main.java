@@ -224,7 +224,7 @@ public class Main {
             n.calcReserveTime();
         }
 
-        System.out.print("Критический путь можно составить, если соеденить дугами задачи:");
+        System.out.print("Критический путь можно составить, если соединить дугами задачи:");
         for (var n : forwardElevationOrder) {
             if (n.isCritical()) {
                 System.out.print(n.getNumber() + ",");
