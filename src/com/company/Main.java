@@ -7,7 +7,8 @@ public class Main {
     public static void main(String[] args) {
         //Example1();
         //Example2();
-        Var2Ex1();
+        //Var2Ex1();
+        Var2Ex2();
     }
 
     /**
@@ -137,6 +138,65 @@ public class Main {
         model.addEdge(11, 12);
 
         model.addEdge(12, 13);
+
+        model.calculate();
+    }
+
+    /**
+     * Вариант 2.
+     * Задача 2.
+     */
+    public static void Var2Ex2() {
+        var model = new NetworkPlaningModel(
+                Node.createInitialNode(),
+                new Node(7),
+                new Node(10),
+                new Node(8),
+                new Node(9),
+                new Node(7),
+                new Node(5),
+                new Node(6),
+                new Node(5),
+                new Node(3),
+                new Node(4),
+                new Node(3),
+                new Node(5),
+                new Node(5),
+                Node.createFinishNode()
+        );
+
+        model.addEdge(1, 2);
+
+        model.addEdge(2, 3);
+        model.addEdge(2, 4);
+        model.addEdge(2, 5);
+
+        model.addEdge(3, 6);
+        model.addEdge(3, 7);
+
+        model.addEdge(4, 7);
+        model.addEdge(4, 10);
+
+        model.addEdge(5, 7);
+        model.addEdge(5, 8);
+
+        model.addEdge(6, 9);
+        model.addEdge(7, 9);
+
+        model.addEdge(8, 10);
+        model.addEdge(8, 11);
+
+        model.addEdge(9, 11);
+        model.addEdge(9, 12);
+
+        model.addEdge(10, 12);
+        model.addEdge(10, 13);
+
+        model.addEdge(11, 14);
+        model.addEdge(12, 14);
+        model.addEdge(13, 14);
+
+        model.addEdge(14, 15);
 
         model.calculate();
     }
