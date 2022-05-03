@@ -4,6 +4,13 @@ import java.util.*;
 
 public class Main {
 
+    //TODO обложить юнит тестами
+    //TODO добавить поиск циклов
+    //TODO использовать set чтобы не дублировать связи в addPre addNext
+    //TODO Создать констурктор UI на swing с поддержкой графа
+    //TODO Создать сохранение структуры на диск в XML/Json
+    //TODO Диаграмма ганта
+
     public static void main(String[] args) {
         //Example1();
         //Example2();
