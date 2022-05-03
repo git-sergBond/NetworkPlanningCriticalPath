@@ -81,11 +81,9 @@ public class Main {
         //TODO + тут важен порядок вычислений для самих функций (Раннее время начала задач -> Позднее время начала задач-> Резервное время на задачи -> Критический путь, сделать так, чтобы программа была не зависима от порядка вычислений
 
         System.out.println("Раннее время начала задач:");
-    //    while (!Node.isAllCalcEarlyStartTime(forwardElevationOrder)) {
-            for (var n : forwardElevationOrder) {
-                n.calcEarlyStartTime();
-            }
-    //    }
+        for (var n : forwardElevationOrder) {
+            n.calcEarlyStartTime();
+        }
 
         System.out.println("Позднее время начала задач:");
         var reverseElevationOrder = new ArrayList<>(forwardElevationOrder);
@@ -170,15 +168,11 @@ public class Main {
 
         public static Node createInitialNode() {
             Node n = new Node(0);
-            //n.isCalculatedEarlyStartTime = true;
-            //n.isCalculatedLateStartTime = true;
             return n;
         }
 
         public static Node createFinishNode() {
             Node n = new Node(0);
-            //n.isCalculatedEarlyStartTime = true;
-            //n.isCalculatedLateStartTime = true;
             return n;
         }
 
@@ -199,12 +193,7 @@ public class Main {
             if (isCalculatedEarlyStartTime) {
                 return;
             }
-/*
-            if (Arrays.stream(preNodes).anyMatch(n -> !(n.isCalculatedEarlyStartTime))) {
-                System.out.print("№" + number + " Пропуск, что-то не посчитано");
-                return;
-            }
-*/
+
             //System.out.print("Раннее время начала задачи №" + number + " Max(");
             System.out.print("№" + number + " Max(");
             earlyStartTime = Arrays.stream(preNodes)
@@ -217,26 +206,17 @@ public class Main {
 
             isCalculatedEarlyStartTime = true;
         }
-/*
-        public static boolean isAllCalcEarlyStartTime(List<Node> forwardElevationOrder) {
-            return forwardElevationOrder.stream().anyMatch(n -> n.isCalculatedEarlyStartTime);
-        }
-*/
+
         public void calcLateStartTime() {
             if (isCalculatedLateStartTime) {
                 return;
             }
-/*
-            if (Arrays.stream(nextNodes).anyMatch(n -> !(n.isCalculatedLateStartTime))) {
-                System.out.print("№" + number + " Пропуск, что-то не посчитано");
-                return;
-            }
-*/
+
             //System.out.print("Позднее время начала задачи №" + number + " Max(");
             System.out.print("№" + number + " Min(");
             lateStartTime = Arrays.stream(nextNodes)
                     .peek(p -> System.out.print("[" + p.number + "] " + p.lateStartTime + " - " + cost))
-                    .map(p -> p.lateStartTime - cost)
+                    .map(p -> p.getLateStartTime() - cost)
                     .peek(e -> System.out.print(" = " + e + "; "))
                     .min(Integer::compareTo)
                     .orElse(earlyStartTime);
