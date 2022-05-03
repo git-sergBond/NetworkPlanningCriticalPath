@@ -5,7 +5,8 @@ import java.util.*;
 public class Main {
 
     public static void main(String[] args) {
-        Example1();
+        //Example1();
+        Example2();
         //Var2Ex1();
     }
 
@@ -23,7 +24,6 @@ public class Main {
         Node n8 = new Node(10);
         Node n9 = new Node(5);
         Node n10 =  Node.createFinishNode();
-        //TODO написать в дальнейшем прогу для вычисления предшественниов и последователей
         n1.addNext(n2);
         n2.addPre(n1)           .addNext(n3,n5);
         n3.addPre(n2)           .addNext(n4);
@@ -36,6 +36,59 @@ public class Main {
         n10.addPre(n8,n9);
 
         networkPlaningModel(Arrays.asList(n1, n2, n3, n4, n5, n6, n7, n8, n9, n10));
+    }
+
+    /**
+     * Пример 2.
+     */
+    public static void Example2() {
+        Node n1 = Node.createInitialNode();
+        Node n2 = new Node(15);
+        Node n3 = new Node(7);
+        Node n4 = new Node(7);
+        Node n5 = new Node(15);
+        Node n6 = new Node(30);
+        Node n7 = new Node(20);
+        Node n8 = new Node(5);
+        Node n9 = new Node(25);
+        Node n10 =  new Node(40);
+        Node n11 =  new Node(30);
+        Node n12 =  new Node(5);
+        Node n13 =  Node.createFinishNode();
+
+        var network = new NetworkPlaningModel(Arrays.asList(n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13));
+
+        network.addEdge(1, 2);
+
+        network.addEdge(2, 3);
+        network.addEdge(2, 4);
+        network.addEdge(2, 5);
+
+        network.addEdge(3, 8);
+
+        network.addEdge(4, 6);
+        network.addEdge(4, 7);
+
+        network.addEdge(5, 8);
+        network.addEdge(5, 7);
+
+        network.addEdge(6, 9);
+
+        network.addEdge(7, 9);
+
+        network.addEdge(8, 9);
+
+        network.addEdge(9, 10);
+
+        network.addEdge(9, 11);
+
+        network.addEdge(10, 12);
+
+        network.addEdge(11, 12);
+
+        network.addEdge(12, 13);
+
+        network.calculate();
     }
 
     /**
@@ -56,7 +109,6 @@ public class Main {
         Node n11 = new Node(40);
         Node n12 = new Node(7);
         Node n13 = Node.createFinishNode();
-        //TODO написать в дальнейшем прогу для вычисления предшественниов и последователей
         n1.addNext(n2);
         n2.addPre(n1)           .addNext(n3,n4,n5);
         n3.addPre(n2)           .addNext(n8);
@@ -115,6 +167,27 @@ public class Main {
         }
     }
 
+    static class NetworkPlaningModel {
+
+        private List<Node> forwardElevationOrder;
+
+        public NetworkPlaningModel(List<Node> forwardElevationOrder) {
+            this.forwardElevationOrder = forwardElevationOrder;
+        }
+
+        public void calculate() {
+            networkPlaningModel(forwardElevationOrder);
+        }
+
+        public void addEdge(int fromNumber, int toNumber) {
+            Node from = this.forwardElevationOrder.stream().filter(e -> e.getNumber() == fromNumber).findFirst().orElseThrow();
+            Node to = this.forwardElevationOrder.stream().filter(e -> e.getNumber() == toNumber).findFirst().orElseThrow();
+            from.addNext(to);
+            to.addPre(from);
+        }
+
+    }
+
     static class Node {
 
         /**
@@ -135,12 +208,12 @@ public class Main {
         /**
          * Предшествующие задачи.
          */
-        private Node[] preNodes = new Node[] {};
+        private List<Node> preNodes = new ArrayList<Node>();
 
         /**
          * Следующие задачи.
          */
-        private Node[] nextNodes = new Node[] {};
+        private List<Node> nextNodes = new ArrayList<Node>();
 
         /**
          * Раннее время начала.
@@ -167,25 +240,42 @@ public class Main {
         }
 
         public static Node createInitialNode() {
-            Node n = new Node(0);
-            return n;
+            return new Node(0);
         }
 
         public static Node createFinishNode() {
-            Node n = new Node(0);
-            return n;
+            return new Node(0);
         }
 
         public Node addPre(Node... preNodes) {
             if (!Objects.isNull(preNodes)) {
-                this.preNodes = preNodes;
+                this.preNodes = Arrays.asList(preNodes);
+            }
+            return this;
+        }
+
+        public Node addPre(Node pre) {
+            if (!Objects.isNull(preNodes)) {
+                if (this.preNodes.stream().anyMatch(n -> n.getNumber() == pre.getNumber())) {
+                    return this;
+                }
+                this.preNodes.add(pre);
             }
             return this;
         }
 
         public void addNext(Node... nextList) {
             if (!Objects.isNull(nextList)) {
-                this.nextNodes = nextList;
+                this.nextNodes = Arrays.asList(nextList);
+            }
+        }
+
+        public void addNext(Node next) {
+            if (!Objects.isNull(next)) {
+                if (this.nextNodes.stream().anyMatch(n -> n.getNumber() == next.getNumber())) {
+                    return;
+                }
+                this.nextNodes.add(next);
             }
         }
 
@@ -194,11 +284,11 @@ public class Main {
                 return earlyStartTime;
             }
 
-            Arrays.stream(preNodes).filter(n -> !(n.isCalculatedEarlyStartTime)).forEach(Node::getEarlyStartTime);
+            preNodes.stream().filter(n -> !(n.isCalculatedEarlyStartTime)).forEach(Node::getEarlyStartTime);
 
             //System.out.print("Раннее время начала задачи №" + number + " Max(");
             System.out.print("№" + number + " Max(");
-            earlyStartTime = Arrays.stream(preNodes)
+            earlyStartTime = preNodes.stream()
                     .peek(p -> System.out.print("[" + p.number + "] " + p.getEarlyStartTime() + " + " + p.cost))
                     .map(p -> p.getEarlyStartTime() + p.cost)
                     //.peek(e -> System.out.print(" = " + e + "; "))
@@ -216,11 +306,11 @@ public class Main {
                 return lateStartTime;
             }
 
-            Arrays.stream(nextNodes).filter(n -> !(n.isCalculatedLateStartTime)).forEach(Node::getLateStartTime);
+            nextNodes.stream().filter(n -> !(n.isCalculatedLateStartTime)).forEach(Node::getLateStartTime);
 
             //System.out.print("Позднее время начала задачи №" + number + " Max(");
             System.out.print("№" + number + " Min(");
-            lateStartTime = Arrays.stream(nextNodes)
+            lateStartTime = nextNodes.stream()
                     .peek(p -> System.out.print("[" + p.number + "] " + p.getLateStartTime() + " - " + cost))
                     .map(p -> p.getLateStartTime() - cost)
                     //.peek(e -> System.out.print(" = " + e + "; "))
