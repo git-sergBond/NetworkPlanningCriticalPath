@@ -6,8 +6,8 @@ public class Main {
 
     public static void main(String[] args) {
         //Example1();
-        Example2();
-        //Var2Ex1();
+        //Example2();
+        Var2Ex1();
     }
 
     /**
@@ -123,7 +123,35 @@ public class Main {
         n12.addPre(n10, n11)    .addNext(n13);
         n13.addPre(n12);
 
-        networkPlaningModel(Arrays.asList(n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13));
+        var model = new NetworkPlaningModel(Arrays.asList(n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13));
+
+        model.addEdge(1, 2);
+
+        model.addEdge(2, 3);
+        model.addEdge(2, 4);
+        model.addEdge(2, 5);
+
+        model.addEdge(3, 8);
+
+        model.addEdge(4, 6);
+        model.addEdge(4, 7);
+
+        model.addEdge(5, 8);
+        model.addEdge(5, 7);
+
+        model.addEdge(6, 9);
+        model.addEdge(7, 9);
+        model.addEdge(8, 9);
+
+        model.addEdge(9, 10);
+        model.addEdge(9, 11);
+
+        model.addEdge(10, 12);
+        model.addEdge(11, 12);
+
+        model.addEdge(12, 13);
+
+        model.calculate();
     }
 
     public static void networkPlaningModel(List<Node> forwardElevationOrder) {
@@ -169,7 +197,7 @@ public class Main {
 
     static class NetworkPlaningModel {
 
-        private List<Node> forwardElevationOrder;
+        private final List<Node> forwardElevationOrder;
 
         public NetworkPlaningModel(List<Node> forwardElevationOrder) {
             this.forwardElevationOrder = forwardElevationOrder;
