@@ -8,7 +8,8 @@ public class Main {
         //Example1();
         //Example2();
         //Var2Ex1();
-        Var2Ex2();
+        //Var2Ex2();
+        Var2Ex3();
     }
 
     /**
@@ -201,6 +202,73 @@ public class Main {
         model.calculate();
     }
 
+    /**
+     * Вариант 2.
+     * Задача 3.
+     */
+    public static void Var2Ex3() {
+        var model = new NetworkPlaningModel(
+                /* 1 */Node.createInitialNode(),
+                /* 2 */new Node(7, "Создание договора об участии в маркетинговом исследовании для предприятий"),
+                /* 3 */new Node(3, "Поиск компаний"),
+                /* 4 */new Node(7, "Рассылка договора"),
+                /* 5 */new Node(3, "Подготовка базы данных"),
+                /* 6 */new Node(1, "Продумать 'Характеристики выборки'"),
+                /* 7 */new Node(1, "Продумать вектор 'Анализа актуальности задач инвестиционного и финансового анализа'"),
+                /* 8 */new Node(1, "Продумать вектор 'Анализ спроса на программное обеспечение для инвестиционного и финансового анализа'"),
+                /* 9 */new Node(1, "Продумать вектор 'Анализ спроса на консультационные услуги и обучение в области инвестиционного и финансового анализа'"),
+                /* 10 */new Node(1, "Продумать вектор 'Анализ источников информации, используемых покупателями'"),
+                /* 11 */new Node(3, "Рассылка анкет"),
+                /* 12 */new Node(14, "Получение ответа от организаций"),
+                /* 13 */new Node(1, "Произвести: 'Характеристики выборки'"),
+                /* 14 */new Node(3, "Произвести: 'Анализа актуальности задач инвестиционного и финансового анализа'"),
+                /* 15 */new Node(3, "Произвести: 'Анализ спроса на программное обеспечение для инвестиционного и финансового анализа'"),
+                /* 16 */new Node(3, "Произвести: 'Анализ спроса на консультационные услуги и обучение в области инвестиционного и финансового анализа'"),
+                /* 17 */new Node(3, "Произвести: 'Анализ источников информации, используемых покупателями'"),
+                /* 18 */new Node(1, "Сделать заключение"),
+                /* 19 */Node.createFinishNode()
+        );
+
+        model.addEdge(1, 2);
+        model.addEdge(1, 3);
+        model.addEdge(1, 5);
+        model.addEdge(1, 6);
+
+        model.addEdge(2, 4);
+        model.addEdge(3, 4);
+
+        model.addEdge(4, 12);
+        model.addEdge(5, 12);
+
+        model.addEdge(6, 7);
+        model.addEdge(6, 8);
+        model.addEdge(6, 9);
+        model.addEdge(6, 10);
+
+        model.addEdge(7, 11);
+        model.addEdge(8, 11);
+        model.addEdge(9, 11);
+        model.addEdge(10, 11);
+
+        model.addEdge(11, 12);
+
+        model.addEdge(12, 13);
+
+        model.addEdge(13, 14);
+        model.addEdge(13, 15);
+        model.addEdge(13, 16);
+        model.addEdge(13, 17);
+
+        model.addEdge(14, 18);
+        model.addEdge(15, 18);
+        model.addEdge(16, 18);
+        model.addEdge(17, 18);
+
+        model.addEdge(18, 19);
+
+        model.calculate();
+    }
+
     public static void networkPlaningModel(List<Node> forwardElevationOrder) {
         //TODO Порядок вычисления важен для самих данных (написать в дальнейшем прогу для вычисления порядка)
         //а пока можно просто перечислить вершины по порядку, слева на права, сверху вниз
@@ -235,6 +303,7 @@ public class Main {
         System.out.println("Итог:");
         for (var n : forwardElevationOrder) {
             System.out.println("№" + n.getNumber() + (n.isCritical() ? " [КРИТИЧЕСКАЯ ЗАДАЧА]" : ""));
+            System.out.println("Название: " + n.getName());
             System.out.println("Длительность: " + n.getCost());
             System.out.println("Раннее время начала: " + n.getEarlyStartTime());
             System.out.println("Позднее время начала: " + n.getLateStartTime());
@@ -280,6 +349,11 @@ public class Main {
         private final int number;
 
         /**
+         * Наименование работы.
+         */
+        private String name;
+
+        /**
          * Длительность задачи в днях.
          */
         private final int cost;
@@ -318,12 +392,18 @@ public class Main {
             this.number = createNumber();
         }
 
+        public Node(int cost, String name) {
+            this.cost = cost;
+            this.number = createNumber();
+            this.name = name;
+        }
+
         public static Node createInitialNode() {
-            return new Node(0);
+            return new Node(0, "Начало проекта");
         }
 
         public static Node createFinishNode() {
-            return new Node(0);
+            return new Node(0, "Конец проекта");
         }
 
         public Node addPre(Node... preNodes) {
@@ -438,6 +518,10 @@ public class Main {
 
         public int getNumber() {
             return number;
+        }
+
+        public String getName() {
+            return name;
         }
 
         private int createNumber() {
