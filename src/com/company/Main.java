@@ -96,34 +96,21 @@ public class Main {
      * Задача1.
      */
     public static void Var2Ex1() {
-        Node n1 = Node.createInitialNode();
-        Node n2 = new Node(30);
-        Node n3 = new Node(15);
-        Node n4 = new Node(20);
-        Node n5 = new Node(25);
-        Node n6 = new Node(30);
-        Node n7 = new Node(45);
-        Node n8 = new Node(45);
-        Node n9 = new Node(25);
-        Node n10 = new Node(60);
-        Node n11 = new Node(40);
-        Node n12 = new Node(7);
-        Node n13 = Node.createFinishNode();
-        n1.addNext(n2);
-        n2.addPre(n1)           .addNext(n3,n4,n5);
-        n3.addPre(n2)           .addNext(n8);
-        n4.addPre(n2)           .addNext(n6, n7);
-        n5.addPre(n2)           .addNext(n7, n8);
-        n6.addPre(n4)           .addNext(n9);
-        n7.addPre(n4, n5)       .addNext(n9);
-        n8.addPre(n3, n5)       .addNext(n9);
-        n9.addPre(n8, n6, n7)   .addNext(n10, n11);
-        n10.addPre(n9)          .addNext(n12);
-        n11.addPre(n9)          .addNext(n12);
-        n12.addPre(n10, n11)    .addNext(n13);
-        n13.addPre(n12);
-
-        var model = new NetworkPlaningModel(Arrays.asList(n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13));
+        var model = new NetworkPlaningModel(
+                Node.createInitialNode(),
+                new Node(30),
+                new Node(15),
+                new Node(20),
+                new Node(25),
+                new Node(30),
+                new Node(45),
+                new Node(45),
+                new Node(25),
+                new Node(60),
+                new Node(40),
+                new Node(7),
+                Node.createFinishNode()
+        );
 
         model.addEdge(1, 2);
 
@@ -201,6 +188,10 @@ public class Main {
 
         public NetworkPlaningModel(List<Node> forwardElevationOrder) {
             this.forwardElevationOrder = forwardElevationOrder;
+        }
+
+        public NetworkPlaningModel(Node... forwardElevationOrder) {
+            this.forwardElevationOrder = Arrays.asList(forwardElevationOrder);
         }
 
         public void calculate() {
