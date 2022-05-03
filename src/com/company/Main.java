@@ -201,7 +201,8 @@ public class Main {
             earlyStartTime = Arrays.stream(preNodes)
                     .peek(p -> System.out.print("[" + p.number + "] " + p.getEarlyStartTime() + " + " + p.cost))
                     .map(p -> p.getEarlyStartTime() + p.cost)
-                    .peek(e -> System.out.print(" = " + e + "; "))
+                    //.peek(e -> System.out.print(" = " + e + "; "))
+                    .peek(e -> System.out.print("; "))
                     .max(Integer::compareTo)
                     .orElse(0);
             System.out.println(") = " + earlyStartTime + "");
@@ -222,7 +223,8 @@ public class Main {
             lateStartTime = Arrays.stream(nextNodes)
                     .peek(p -> System.out.print("[" + p.number + "] " + p.getLateStartTime() + " - " + cost))
                     .map(p -> p.getLateStartTime() - cost)
-                    .peek(e -> System.out.print(" = " + e + "; "))
+                    //.peek(e -> System.out.print(" = " + e + "; "))
+                    .peek(e -> System.out.print("; "))
                     .min(Integer::compareTo)
                     .orElse(earlyStartTime);
             System.out.println(") = " + lateStartTime + "");
