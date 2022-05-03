@@ -164,10 +164,10 @@ public class Main {
             n.calcReserveTime();
         }
 
-        System.out.println("Критический путь:");
+        System.out.print("Критический путь можно составить, если соеденить дугами задачи:");
         for (var n : forwardElevationOrder) {
             if (n.isCritical()) {
-                System.out.print("[" + n.getNumber() + "]->");
+                System.out.print(n.getNumber() + ",");
             }
         }
         System.out.println();
