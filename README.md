@@ -1,3 +1,3 @@
-# NetworkPlanningCriticalPath
+# [Network Planning] Find Critical Path
 
 Программа для вычисления критического пути для модели сетевого планирования. Предмет - "Управление проектами"
