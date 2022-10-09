@@ -51,17 +51,18 @@ public class Main {
         Node n9 = new Node(5);
         Node n10 =  Node.createFinishNode();
         n1.addNext(n2);
-        n2.addPre(n1)           .addNext(n3,n5);
-        n3.addPre(n2)           .addNext(n4);
-        n4.addPre(n3, n5)           .addNext(n7);
-        n5.addPre(n2)           .addNext(n4,n6);
-        n6.addPre(n5)           .addNext(n7);
-        n7.addPre(n4,n6)       .addNext(n8, n9);
+        n2.addPre(n1)       .addNext(n3,n5);
+        n3.addPre(n2)       .addNext(n4);
+        n4.addPre(n3, n5)   .addNext(n7);
+        n5.addPre(n2)       .addNext(n4,n6);
+        n6.addPre(n5)       .addNext(n7);
+        n7.addPre(n4,n6)    .addNext(n8, n9);
         n8.addPre(n7)       .addNext(n10);
-        n9.addPre(n7)   .addNext(n10);
+        n9.addPre(n7)       .addNext(n10);
         n10.addPre(n8,n9);
 
-        networkPlaningModel(Arrays.asList(n1, n2, n3, n4, n5, n6, n7, n8, n9, n10));
+        var network = new NetworkPlaningModel(Arrays.asList(n1, n2, n3, n4, n5, n6, n7, n8, n9, n10));
+        network.calculate();
     }
 
     /**
@@ -293,48 +294,6 @@ public class Main {
         model.calculate();
     }
 
-    public static void networkPlaningModel(List<Node> forwardElevationOrder) {
-        //TODO Порядок вычисления важен для самих данных (написать в дальнейшем прогу для вычисления порядка)
-        //а пока можно просто перечислить вершины по порядку, слева на права, сверху вниз
-        //типа так Arrays.asList(n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13)
-        //TODO + тут важен порядок вычислений для самих функций (Раннее время начала задач -> Позднее время начала задач-> Резервное время на задачи -> Критический путь, сделать так, чтобы программа была не зависима от порядка вычислений
-
-        System.out.println("Раннее время начала задач:");
-        for (var n : forwardElevationOrder) {
-            n.calcEarlyStartTime();
-        }
-
-        System.out.println("Позднее время начала задач:");
-        var reverseElevationOrder = new ArrayList<>(forwardElevationOrder);
-        Collections.reverse(reverseElevationOrder);
-        for (var n : reverseElevationOrder) {
-            n.calcLateStartTime();
-        }
-
-        System.out.println("Резервное время на задачи:");
-        for (var n : forwardElevationOrder) {
-            n.calcReserveTime();
-        }
-
-        System.out.print("Критический путь можно составить, если соединить дугами задачи:");
-        for (var n : forwardElevationOrder) {
-            if (n.isCritical()) {
-                System.out.print(n.getNumber() + ",");
-            }
-        }
-        System.out.println();
-
-        System.out.println("Итог:");
-        for (var n : forwardElevationOrder) {
-            System.out.println("№" + n.getNumber() + (n.isCritical() ? " [КРИТИЧЕСКАЯ ЗАДАЧА]" : ""));
-            System.out.println("Название: " + n.getName());
-            System.out.println("Длительность: " + n.getCost());
-            System.out.println("Раннее время начала: " + n.getEarlyStartTime());
-            System.out.println("Позднее время начала: " + n.getLateStartTime());
-            System.out.println("Резерв времени: " + n.getReserveTime());
-        }
-    }
-
     static class NetworkPlaningModel {
 
         private final List<Node> forwardElevationOrder;
@@ -348,7 +307,37 @@ public class Main {
         }
 
         public void calculate() {
-            networkPlaningModel(forwardElevationOrder);
+            //TODO Порядок вычисления важен для самих данных (написать в дальнейшем прогу для вычисления порядка)
+            //а пока можно просто перечислить вершины по порядку, слева на права, сверху вниз
+            //типа так Arrays.asList(n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13)
+            //TODO + тут важен порядок вычислений для самих функций (Раннее время начала задач -> Позднее время начала задач-> Резервное время на задачи -> Критический путь, сделать так, чтобы программа была не зависима от порядка вычислений
+
+            System.out.println("Раннее время начала задач:");
+            forwardElevationOrder.forEach(Node::calcEarlyStartTime);
+
+            System.out.println("Позднее время начала задач:");
+            var reverseElevationOrder = new ArrayList<>(forwardElevationOrder);
+            Collections.reverse(reverseElevationOrder);
+            reverseElevationOrder.forEach(Node::calcLateStartTime);
+
+            System.out.println("Резервное время на задачи:");
+            forwardElevationOrder.forEach(Node::calcReserveTime);
+
+            System.out.print("Критический путь можно составить, если соединить дугами задачи:");
+            forwardElevationOrder.stream()
+                    .filter(Node::isCritical)
+                    .forEach(n -> System.out.print(n.getNumber() + ","));
+            System.out.println();
+
+            System.out.println("Итог:");
+            forwardElevationOrder.forEach(n -> {
+                System.out.println("№" + n.getNumber() + (n.isCritical() ? " [КРИТИЧЕСКАЯ ЗАДАЧА]" : ""));
+                System.out.println("Название: " + n.getName());
+                System.out.println("Длительность: " + n.getCost());
+                System.out.println("Раннее время начала: " + n.getEarlyStartTime());
+                System.out.println("Позднее время начала: " + n.getLateStartTime());
+                System.out.println("Резерв времени: " + n.getReserveTime());
+            });
         }
 
         public void addEdge(int fromNumber, int toNumber) {
@@ -357,7 +346,6 @@ public class Main {
             from.addNext(to);
             to.addPre(from);
         }
-
     }
 
     static class Node {
