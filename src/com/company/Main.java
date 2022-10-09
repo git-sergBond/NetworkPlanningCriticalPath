@@ -420,7 +420,7 @@ public class Main {
 
         public Node addPre(Node... preNodes) {
             if (!Objects.isNull(preNodes)) {
-                this.preNodes = Arrays.asList(preNodes);
+                Arrays.asList(preNodes).forEach(this::addPre);
             }
             return this;
         }
@@ -437,7 +437,7 @@ public class Main {
 
         public void addNext(Node... nextList) {
             if (!Objects.isNull(nextList)) {
-                this.nextNodes = Arrays.asList(nextList);
+                Arrays.asList(nextList).forEach(this::addNext);
             }
         }
 
